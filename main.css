@@ -3,6 +3,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    background: 0 0;
+}
 ul {
   margin: 0;
   padding: 0;
@@ -10,6 +15,22 @@ ul {
 a {
   color: #777;
 }
+
+.raw-sienna {
+    color: #c27542;
+}
+.bg-raw-sienna {
+    background-color: #c27542;
+}
+.b--raw-sienna {
+    border-color: #c27542;
+}
+.raw-sienna:hover,
+.raw-sienna:focus { color: #c27542; }
+
+.hover-bg-raw-sienna:hover,
+.hover-bg-raw-sienna:focus { background-color: #c27542; }
+
 .row {
   width: 88%;
   margin: 0 auto;

@@ -4,7 +4,7 @@
         <h1 class="fw8 mt5">{{ msg }}</h1>
         <div class="flex justify-between mt5">
           <label for="">{{ label }}</label>
-          <a class="link" href="#" @click="runRandomHex">🔮 Random</a>
+          <a class="link pointer" @click="runRandomHex">🔮 Random</a>
         </div>
 
         <div class="relative mt3">
@@ -12,30 +12,45 @@
           <input class="w-100 pv3 pl4 input-reset ba b--black-20" v-model="colorValue" placeholder="0AD674" >
         </div>
 
-        <!-- <div id="colorbox_darker" class="pa3 white w-100"></div>
-        <div id="colorbox_dark" class="pa3 white w-100"></div>
-        <div id="colorbox_default" class="pa3 white w-100"></div>
-        <div id="colorbox_light" class="pa3 white w-100"></div>
-        <div id="colorbox_lighter" class="pa3 white w-100"></div> -->
-
         <ul class="list">
-<li class="pa3 w-100"
-v-for="color in colors"
-:class="{ white: color.colorBrightness < 0.05 }"
-:style=" { backgroundColor: color.colorHex  }">
 
-  <div class="flex justify-between">
-      <span>{{ color.colorName}}</span>
-      <span>{{ color.colorHex }}</span>
-  </div>
-</li>
+          <button @click="show = !show">Toggle show</button>
+          <li class="pa3 w-100"
+          v-for="color in colors"
+          :class="{ white: color.colorBrightness < 0.05 }"
+          :style=" { backgroundColor: color.colorHex  }">
+          <div class="flex justify-between">
+              <span>{{ color.colorName }}</span>
+              <span>{{ color.colorHex }}</span>
+          </div>
+          <transition name="bounce">
+            <p v-if="show">
+<pre class="dib w-100 ma0 pa0 overflow-x-auto ">
+.{{ color.colorName }} {
+    color: {{ color.colorHex }};
+}
+.bg-{{ color.colorName }} {
+    background-color: {{ color.colorHex }};
+}
+.b--{{ color.colorName }} {
+    border-color: {{ color.colorHex }};
+}
+.{{ color.colorName }}:hover,
+.{{ color.colorName }}:focus { color: {{ color.colorHex }}; }
+
+.hover-bg-{{ color.colorName }}:hover,
+.hover-bg-{{ color.colorName }}:focus { background-color: {{ color.colorHex }}; }
+</pre>
+            </p>
+          </transition>
+          </li>
         </ul>
 
-        <code class="dib w-100 bg-black-10 ma0 pa3">
-.color {
-    color: #{{ colorValue }};
-}
-        </code>
+
+<h1 class="fw8 mt5">Grab the CSS code!</h1>
+<div v-for="color in colors">
+
+</div>
 
     </div>
   </div>
@@ -56,6 +71,7 @@ export default {
   name: 'app',
   data () {
     return {
+      show: false,
       msg: 'Spindrift Brand Color generator',
       colorValue: '4e35e1',
       label: 'Enter your color',
