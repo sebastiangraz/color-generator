@@ -3,10 +3,9 @@ import Vue from 'vue'
 import App from './app.vue'
 import './main.css'
 
-
-
-
-new Vue({
+var vm = new Vue({
   el: '#app',
-  render: h => h(App)
+  render (createElement) {
+    return createElement(App);
+  }
 })

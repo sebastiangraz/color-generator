@@ -9,7 +9,7 @@
 
         <div class="relative mt3">
           <span class="absolute top-1 left-1 black-50">#</span>
-          <input class="w-100 pv3 pl4 input-reset ba b--black-20" @keyup="getColor(colorValue)" v-model="colorValue" placeholder="0AD674" >
+          <input class="w-100 pv3 pl4 input-reset ba b--black-20" v-model="colorValue" placeholder="0AD674" >
         </div>
 
         <!-- <div id="colorbox_darker" class="pa3 white w-100"></div>
@@ -19,9 +19,16 @@
         <div id="colorbox_lighter" class="pa3 white w-100"></div> -->
 
         <ul class="list">
-          <li :id="item.id" v-for="item in items" :style="" class="pa3 w-100">
+<li class="pa3 w-100"
+v-for="color in colors"
+:class="{ white: color.colorBrightness < 0.05 }"
+:style=" { backgroundColor: color.colorHex  }">
 
-          </li>
+  <div class="flex justify-between">
+      <span>{{ color.colorName}}</span>
+      <span>{{ color.colorHex }}</span>
+  </div>
+</li>
         </ul>
 
         <code class="dib w-100 bg-black-10 ma0 pa3">
@@ -36,97 +43,81 @@
 
 <script>
 import tinycolor from 'tinycolor2'
-import chroma from 'chroma-js'
 import namer from 'color-namer'
 import { kebabCase } from 'lodash'
-
-
-
+import chroma from 'chroma-js'
 
 
 
 // Todo PRINT THE HEX ON EACH OF THE COLORS
 
 
-
 export default {
   name: 'app',
   data () {
     return {
-      msg: 'Color generator',
-      label: 'Enter your color',
+      msg: 'Spindrift Brand Color generator',
       colorValue: '4e35e1',
+      label: 'Enter your color',
       items: [
             {
               intensity: 3,
-              colorProperty: 'darken',
-              id: 'colorbox_darker'
+              colorProperty: 'darken'
             },
             {
               intensity: 1,
-              colorProperty: 'darken',
-              id: 'colorbox_dark'
+              colorProperty: 'darken'
             },
             {
               intensity: 0,
-              colorProperty: '',
-              id: 'colorbox_default'
+              colorProperty: 'brighten'
             },
             {
               intensity: 1,
-              colorProperty: 'brighten',
-              id: 'colorbox_light'
+              colorProperty: 'brighten'
             },
             {
               intensity: 3,
-              colorProperty: 'brighten',
-              id: 'colorbox_lighter'
+              colorProperty: 'brighten'
             }
           ],
     }
   },
   mounted:function(){
-      this.getColor(this.colorValue)
+      this.getColorName
+  },
+  computed: {
+    colors() {
+      return this.items.map((item) => {
+        var colorHex = chroma(this.colorValue)[item.colorProperty](item.intensity).toString(),
+            colorName = _.kebabCase(namer(colorHex).ntc[0].name),
+            colorBrightness = chroma(colorHex).luminance().toString();
+        return {colorHex, colorName, colorBrightness}
+      });
+    }
+    // colors() {
+    //   return this.items.map((item) => {
+    //     console.log(item)
+    //     if (item.colorProperty !== '') {
+    //       return chroma(this.colorValue)[item.colorProperty](item.intensity).toString();
+    //
+    //     } else {
+    //       return `#${this.colorValue}`;
+    //     }
+    //   });
+    // }
   },
   methods: {
+
     runRandomHex: function () {
       this.colorValue = this.generateRandomHex();
-      this.getColor(this.colorValue)
     },
-    generateRandomHex: function () {
+    generateRandomHex: function (color) {
       var length = 6;
       var chars = '0123456789ABCDEF';
       var hex = '';
       while(length--) hex += chars[(Math.random() * 16) | 0];
       return hex;
-    },
-    getColor: function (color) {
-      var color_darker = chroma(color).darken(3);
-      var color_dark = chroma(color).darken(1);
-      var color_default = chroma(color);
-      var color_light = chroma(color).brighten(1);
-      var color_lighter = chroma(color).brighten(3);
-
-      // for (let [key, value] of Object.entries(colorBoxes)) {
-      //   Object.assign(colorbox_darker.style,{backgroundColor: value});
-      // }
-
-      colorbox_darker.style.backgroundColor = color_darker
-      colorbox_dark.style.backgroundColor = color_dark
-      colorbox_default.style.backgroundColor = color_default
-      colorbox_light.style.backgroundColor = color_light
-      colorbox_lighter.style.backgroundColor = color_lighter
-
-      colorbox_darker.style.color = chroma(color_lighter).brighten(1)
-      colorbox_light.style.color = chroma(color_lighter).darken(3)
-      colorbox_lighter.style.color = chroma(color_lighter).darken(3)
-
-      colorbox_darker.innerHTML = _.kebabCase(namer(color_darker).ntc[0].name);
-      colorbox_dark.innerHTML = _.kebabCase(namer(color_dark).ntc[0].name);
-      colorbox_default.innerHTML = _.kebabCase(namer(color_default).ntc[0].name);
-      colorbox_light.innerHTML = _.kebabCase(namer(color_light).ntc[0].name);
-      colorbox_lighter.innerHTML = _.kebabCase(namer(color_lighter).ntc[0].name);
-
     }
   }
 }
