@@ -8,6 +8,24 @@ body {
     width: 0;
     background: 0 0;
 }
+.bounce-enter-active {
+  animation: bounce-in 1s;
+  animation-timing-function: cubic-bezier(0,.69,0,1);
+}
+.bounce-leave-active {
+  animation: bounce-in 0s reverse;
+  animation-fill-mode: forwards;
+}
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
 ul {
   margin: 0;
   padding: 0;

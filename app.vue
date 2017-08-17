@@ -1,10 +1,15 @@
 <template>
   <div id="app">
+
     <div class="row">
         <h1 class="fw8 mt5">{{ msg }}</h1>
         <div class="flex justify-between mt5">
           <label for="">{{ label }}</label>
-          <a class="link pointer" @click="runRandomHex">🔮 Random</a>
+          <div class="">
+            <a class="link pointer mr4 hover-black" @click="runRandomHex">🔮 Random</a>
+            <a class="link pointer hover-black" @click="show = !show">🎼 Show CSS</a>
+          </div>
+
         </div>
 
         <div class="relative mt3">
@@ -14,17 +19,17 @@
 
         <ul class="list">
 
-          <button @click="show = !show">Toggle show</button>
+
           <li class="pa3 w-100"
           v-for="color in colors"
           :class="{ white: color.colorBrightness < 0.05 }"
           :style=" { backgroundColor: color.colorHex  }">
-          <div class="flex justify-between">
+          <div v-if="!show" class="flex justify-between">
               <span>{{ color.colorName }}</span>
               <span>{{ color.colorHex }}</span>
           </div>
           <transition name="bounce">
-            <p v-if="show">
+            <div v-if="show">
 <pre class="dib w-100 ma0 pa0 overflow-x-auto ">
 .{{ color.colorName }} {
     color: {{ color.colorHex }};
@@ -41,17 +46,10 @@
 .hover-bg-{{ color.colorName }}:hover,
 .hover-bg-{{ color.colorName }}:focus { background-color: {{ color.colorHex }}; }
 </pre>
-            </p>
+            </div>
           </transition>
           </li>
         </ul>
-
-
-<h1 class="fw8 mt5">Grab the CSS code!</h1>
-<div v-for="color in colors">
-
-</div>
-
     </div>
   </div>
 </template>
@@ -61,7 +59,6 @@ import tinycolor from 'tinycolor2'
 import namer from 'color-namer'
 import { kebabCase } from 'lodash'
 import chroma from 'chroma-js'
-
 
 
 // Todo PRINT THE HEX ON EACH OF THE COLORS
@@ -124,7 +121,6 @@ export default {
     // }
   },
   methods: {
-
     runRandomHex: function () {
       this.colorValue = this.generateRandomHex();
     },
