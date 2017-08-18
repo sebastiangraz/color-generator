@@ -1,50 +1,55 @@
 <template>
   <div id="app">
-
+    <div class="absolute z-0 w-100 o-30">
+      <div class="flex flex-wrap justify-center">
+        <span v-for="color in colors" class="nl4 nr4 blur br-pill w5 dib h5" :style=" { backgroundColor: color.colorHex }"></span>
+      </div>
+    </div>
     <div class="row">
-        <h1 class="fw8 mt5">{{ msg }}</h1>
-        <div class="flex justify-between mt5">
-          <label for="">{{ label }}</label>
-          <div class="">
-            <a class="link pointer mr4 hover-black" @click="runRandomHex">🔮 Random</a>
-            <a class="link pointer hover-black" @click="show = !show">🎼 Show CSS</a>
-          </div>
+      <div class="relative z-1">
+        <h1 class="fw8 mt5"> Spindrift Brand Color generator </h1>
+      </div>
 
+      <div class="flex-ns justify-between-ns mt5 z-1 relative">
+        <div class="">
+          <a class="link pointer mr4 hover-black" @click="runRandomHex">🔮 Random</a>
+          <a class="link pointer hover-black" @click="show = !show">🎼 <span v-if="show">Hide</span> <span v-else="show">Show</span> CSS</a>
         </div>
+      </div>
 
-        <div class="relative mt3">
-          <span class="absolute top-1 left-1 black-50">#</span>
-          <input class="w-100 pv3 pl4 input-reset ba b--black-20" v-model="colorValue" placeholder="0AD674" >
-        </div>
+      <div class="relative mt3 z-1">
+        <span class="absolute top-1 left-1 black-50">#</span>
+        <input class="gray hover-black w-100 pv3 pl4 input-reset bn" v-model="colorValue" placeholder="Enter colorname or HEX" >
+      </div>
 
-        <ul class="list">
+      <ul class="list relative z-1 mb5">
 
 
           <li class="pa3 w-100"
           v-for="color in colors"
-          :class="{ white: color.colorBrightness < 0.05 }"
+          :class="{ white: color.colorBrightness < 0.07 }"
           :style=" { backgroundColor: color.colorHex  }">
           <div v-if="!show" class="flex justify-between">
-              <span>{{ color.colorName }}</span>
-              <span>{{ color.colorHex }}</span>
+              <input :class="{ white: color.colorBrightness < 0.07 }" class="hover-bg-white hover-black pointer bg-transparent di bt-0 br-0 bl-0 bb pa2" v-model="color.colorName"/>
+              <span class="pa2">{{ color.colorHex}}</span>
           </div>
           <transition name="bounce">
             <div v-if="show">
 <pre class="dib w-100 ma0 pa0 overflow-x-auto ">
-.{{ color.colorName }} {
+.{{ color.colorName | kebabify }} {
     color: {{ color.colorHex }};
 }
-.bg-{{ color.colorName }} {
+.bg-{{ color.colorName | kebabify }} {
     background-color: {{ color.colorHex }};
 }
-.b--{{ color.colorName }} {
+.b--{{ color.colorName | kebabify }} {
     border-color: {{ color.colorHex }};
 }
-.{{ color.colorName }}:hover,
-.{{ color.colorName }}:focus { color: {{ color.colorHex }}; }
+.{{ color.colorName | kebabify }}:hover,
+.{{ color.colorName | kebabify }}:focus { color: {{ color.colorHex }}; }
 
-.hover-bg-{{ color.colorName }}:hover,
-.hover-bg-{{ color.colorName }}:focus { background-color: {{ color.colorHex }}; }
+.hover-bg-{{ color.colorName | kebabify }}:hover,
+.hover-bg-{{ color.colorName | kebabify }}:focus { background-color: {{ color.colorHex }}; }
 </pre>
             </div>
           </transition>
@@ -69,8 +74,7 @@ export default {
   data () {
     return {
       show: false,
-      msg: 'Spindrift Brand Color generator',
-      colorValue: '4e35e1',
+      colorValue: '6C63E5',
       label: 'Enter your color',
       items: [
             {
@@ -108,19 +112,16 @@ export default {
         return {colorHex, colorName, colorBrightness}
       });
     }
-    // colors() {
-    //   return this.items.map((item) => {
-    //     console.log(item)
-    //     if (item.colorProperty !== '') {
-    //       return chroma(this.colorValue)[item.colorProperty](item.intensity).toString();
-    //
-    //     } else {
-    //       return `#${this.colorValue}`;
-    //     }
-    //   });
-    // }
+  },
+  filters: {
+    kebabify: function(value) {
+      return _.kebabCase(value);
+    }
   },
   methods: {
+    randomList: function(rand){
+      return rand.sort(function(){return 0.5 - Math.random()});
+    },
     runRandomHex: function () {
       this.colorValue = this.generateRandomHex();
     },

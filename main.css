@@ -30,29 +30,19 @@ ul {
   margin: 0;
   padding: 0;
 }
-a {
-  color: #777;
-}
 
-.raw-sienna {
-    color: #c27542;
+.blur {
+  filter: blur(80px);
 }
-.bg-raw-sienna {
-    background-color: #c27542;
-}
-.b--raw-sienna {
-    border-color: #c27542;
-}
-.raw-sienna:hover,
-.raw-sienna:focus { color: #c27542; }
-
-.hover-bg-raw-sienna:hover,
-.hover-bg-raw-sienna:focus { background-color: #c27542; }
 
 .row {
   width: 88%;
   margin: 0 auto;
   max-width: 640px;
+}
+input:focus {
+    outline: 0;
+    border-color: black;
 }
 .list > li {
   transition: background 1s cubic-bezier(.09,.71,.37,.97);
